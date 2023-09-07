@@ -133,16 +133,20 @@ else: # p_0
                 st.image(file_stream, caption="업로드된 이미지", use_column_width=True)
 
                 if st.button('AI에게 사진 보내기'):
-                    flask_server_url = "http://localhost:5000/upload"
+                    flask_server_url = "http://localhost:5000/모델을 돌리는 엔드포인트 어딘가"
                     files = {"file": (uploaded_file.name, file_stream)}
+                    st.session_state['loading'] = True  # 로딩 상태를 True로 설정
+                    st.experimental_rerun()            # 로딩 페이지로 이동
                     response = requests.post(flask_server_url, files=files)
 
                     if response.status_code == 200:
-                        st.success("이미지 전송 성공!")
-                        st.session_state['loading'] = True  # 로딩 상태를 True로 설정
-                        time.sleep(3)  # 3초 대기하거나 원하는 동작 수행
-                        st.experimental_rerun()
+                        st.session_state['loading'] = False  # 로딩 상태를 종료
+                        st.seesion_state['result_page'] = True # 결과 페이지
+                        st.experimental_rerun()                # 로 이동
                     else:
+                        st.session_state['loading'] = False  # 로딩 상태를 종료
+                        st.seesion_state['fail_page'] = True   # 실패페이지
+                        st.experimental_rerun()                # 로 이동
                         st.error("이미지 전송 실패")
 
     with right_column:
