@@ -18,6 +18,9 @@ if 'loading' not in st.session_state: # p_3
 if 'sign_up' not in st.session_state: # p_4
     st.session_state['sign_up'] = False
 
+if 'output' not in st.session_state: # p_5
+    st.session_state['output'] = False
+
 # 로그인이 되지 않은 경우
 if not st.session_state['logged_in']: # p_1
     st.session_state['logged_in'] = False
@@ -39,10 +42,19 @@ if not st.session_state['logged_in']: # p_1
                 return True
             else:
                 return False
+            
+        # 비밀번호 형식 검증
+        def validate_password(password):
+            regex = r'^.{6,}$'
+            if re.search(regex, password):
+                return True
+            else:
+                return False
+            
         # 회원가입 버튼 클릭 후 세션 이동
         if st.button("회원가입 신청"):  # HJ_01
             if signup_pw == signup_confirm_pw:
-                if validate_email(signup_id):  # 이메일 형식 검증 추가
+                if validate_email(signup_id) and validate_password(signup_pw):  # 이메일 형식 및 비밀번호 형식 검증
                     response = requests.post("http://localhost:5000/sign-up", json={
                         "username": signup_username,
                         "id": signup_id,
@@ -83,7 +95,7 @@ if not st.session_state['logged_in']: # p_1
             st.session_state['sign_up'] = True
             st.experimental_rerun()
         
-        right_column.image("main_image.jpg", use_column_width=True)
+        right_column.image("./front_images/main_image.jpg", use_column_width=True)
    
 # 로그인 성공 페이지
 elif 'login_message_displayed' not in st.session_state: # p_2
@@ -96,7 +108,7 @@ elif 'login_message_displayed' not in st.session_state: # p_2
 
 # 로딩 상태인 경우
 elif st.session_state['loading']: # p_3
-    st.image("loading_image.jpg", use_column_width=True)  # 로딩 이미지
+    st.image("./front_images/loading_image.jpg", use_column_width=True)  # 로딩 이미지
     st.text("분석 중입니다... \n 의류의 종류, 색상을 판단하고 어울릴만한 패션을 선별 중입니다.")
     # 여기서 flask에서 어떤 반응이오면 다음 세션으로 넘어가는 코드가 들어가야할 것 같음.
 
@@ -134,5 +146,5 @@ else: # p_0
                         st.error("이미지 전송 실패")
 
     with right_column:
-        st.image("upload_session_image.jpg", use_column_width=True)
+        st.image("./front_images/upload_session_image.jpg", use_column_width=True)
 

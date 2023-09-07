@@ -48,7 +48,7 @@ def upload_file():
 #         res = {"msg": "User registration has been successfully done."}
 #         return jsonify(res), 200
 
-# if __name__ == '__main__':
-#     if not os.path.exists('uploads'):
-#         os.makedirs('uploads')
-#     app.run(debug=True)
+if __name__ == '__main__':
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
+    app.run(debug=True)
