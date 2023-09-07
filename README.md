@@ -1,1 +1,3 @@
-# ms_project_front
+# Frontend
+
+## pip install -r requirements.txt
